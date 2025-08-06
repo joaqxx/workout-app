@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  font-family: "Inter", "Poppins", sans-serif;
+}
+
+span {
+  font-family: inherit;
+  font-weight: inherit;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9; /* Light mode track */
+}
+.dark ::-webkit-scrollbar-track {
+  background: #0f172a; /* Dark mode track (dark-bg-secondary) */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e3a8a; /* Light mode thumb (blue-900) */
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #22d3ee; /* Dark mode thumb (dark-accent-main) */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1e40af; /* Light mode thumb hover (blue-800) */
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #06b6d4; /* Dark mode thumb hover (dark-accent-dark) */
+}
+
+/* Smooth animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+/* Custom gradient backgrounds */
+.gradient-blue {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #1e40af; /* Light mode focus */
+  outline-offset: 2px;
+}
+.dark button:focus-visible,
+.dark input:focus-visible {
+  outline: 2px solid #22d3ee; /* Dark mode focus (dark-accent-main) */
+}
