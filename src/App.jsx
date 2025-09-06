@@ -61,21 +61,21 @@ function App() {
       <div className="fixed top-6 right-6 z-50 flex gap-3">
         <button
           onClick={() => setShowAnalytics(true)}
-          className="p-3 rounded-full bg-gray-200 dark:bg-dark-bg-secondary text-gray-800 dark:text-dark-text-primary shadow-lg hover:scale-110 transition-transform duration-200"
+          className="p-3 rounded-full bg-gray-200 dark:bg-black text-gray-800 dark:text-dark-text-primary shadow-lg hover:scale-110 transition-transform duration-200"
           aria-label="View Analytics"
         >
           <BarChart3 size={20} />
         </button>
         <button
           onClick={() => setShowCustomWorkoutCreator(true)}
-          className="p-3 rounded-full bg-gray-200 dark:bg-dark-bg-secondary text-gray-800 dark:text-dark-text-primary shadow-lg hover:scale-110 transition-transform duration-200"
+          className="p-3 rounded-full bg-gray-200 dark:bg-black text-gray-800 dark:text-dark-text-primary shadow-lg hover:scale-110 transition-transform duration-200"
           aria-label="Create Custom Workout"
         >
           <Plus size={20} />
         </button>
         <button
           onClick={() => setIsDarkMode(!isDarkMode)}
-          className="p-3 rounded-full bg-gray-200 dark:bg-dark-bg-secondary text-gray-800 dark:text-dark-text-primary shadow-lg hover:scale-110 transition-transform duration-200"
+          className="p-3 rounded-full bg-gray-200 dark:bg-black text-gray-800 dark:text-dark-text-primary shadow-lg hover:scale-110 transition-transform duration-200"
           aria-label="Toggle dark mode"
         >
           {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}

@@ -34,7 +34,8 @@ export default function ExerciseCard(props) {
   const [loggedSets, setLoggedSets] = useState([])
   const [restTimer, setRestTimer] = useState(0)
   const [isResting, setIsResting] = useState(false)
-  const [restDuration, setRestDuration] = useState(90) // Default 90 seconds
+  const [restDuration, setRestDuration] = useState(90)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   // Load logged sets from localStorage on component mount
   useEffect(() => {
@@ -55,7 +56,6 @@ export default function ExerciseCard(props) {
       }, 1000)
     } else if (restTimer === 0 && isResting) {
       setIsResting(false)
-      // Play a sound or show notification when rest is complete
       if ("Notification" in window && Notification.permission === "granted") {
         new Notification("Rest Complete!", {
           body: "Time for your next set!",
@@ -92,14 +92,11 @@ export default function ExerciseCard(props) {
     setLoggedSets(updatedSets)
     setSetsComplete(updatedSets.length)
 
-    // Save to localStorage
     localStorage.setItem(`exercise_${workoutId}_${i}`, JSON.stringify(updatedSets))
 
-    // Reset form
     setCurrentSetData({ weight: "", reps: "", rpe: "" })
     setShowLoggingModal(false)
 
-    // Start rest timer
     setRestTimer(restDuration)
     setIsResting(true)
 
@@ -119,7 +116,6 @@ export default function ExerciseCard(props) {
     setRestTimer(0)
   }
 
-  // Effect to hide the set completion popup after a delay
   useEffect(() => {
     if (showSetCompletionPopup) {
       const timer = setTimeout(() => {
@@ -144,57 +140,64 @@ export default function ExerciseCard(props) {
   }
 
   return (
-    <div className="bg-white dark:bg-dark-bg-secondary rounded-xl shadow-lg border border-gray-100 dark:border-dark-border-dark overflow-hidden hover:shadow-xl transition-all duration-300">
+    <div className="group bg-white dark:bg-gray-600 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-900 to-blue-800 dark:from-dark-accent-main dark:to-dark-accent-dark text-white p-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-              <span className="text-xl font-bold">{String(i + 1).padStart(2, "0")}</span>
+      <div className="bg-black dark:bg-white text-white dark:text-black p-8 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5 dark:opacity-10">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-300 to-transparent dark:from-gray-600"></div>
+        </div>
+        
+        <div className="relative z-10 flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            {/* Exercise Number */}
+            <div className="w-16 h-16 bg-white dark:bg-black text-black dark:text-white rounded-full flex items-center justify-center border-2 border-white dark:border-black">
+              <span className="text-2xl font-black">{String(i + 1).padStart(2, "0")}</span>
             </div>
+            
             <div>
-              <h2 className="text-xl font-bold capitalize">{exercise.name.replaceAll("_", " ")}</h2>
-              <p className="text-blue-100 dark:text-dark-text-secondary capitalize text-sm">{exercise.type}</p>
+              <h2 className="text-3xl font-black capitalize tracking-tight">
+                {exercise.name.replaceAll("_", " ")}
+              </h2>
+              <div className="flex items-center gap-2 mt-2">
+                <div className="w-2 h-2 bg-white dark:bg-black rounded-full"></div>
+                <p className="text-white dark:text-black capitalize text-sm font-medium tracking-wide">
+                  {exercise.type}
+                </p>
+              </div>
             </div>
           </div>
+
           {/* Rest Timer Display */}
           {isResting && (
-            <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
-              <p className="text-sm font-medium">Rest: {formatTime(restTimer)}</p>
+            <div className="bg-white dark:bg-black text-black dark:text-white px-6 py-3 rounded-full border border-white dark:border-black">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-black dark:bg-white rounded-full animate-pulse"></div>
+                <p className="text-lg font-bold tracking-widest">REST: {formatTime(restTimer)}</p>
+              </div>
             </div>
           )}
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-6 space-y-6">
+      <div className="p-8 space-y-8">
         {/* Muscle Groups */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-dark-text-secondary uppercase tracking-wide mb-2">
-            Target Muscles
-          </h3>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-1 h-6 bg-black dark:bg-white rounded-full"></div>
+            <h3 className="text-sm font-black text-black dark:text-white uppercase tracking-widest">
+              TARGET MUSCLES
+            </h3>
+          </div>
+          <div className="flex flex-wrap gap-3">
             {exercise.muscles.map((muscle, index) => (
               <span
                 key={index}
-                className="bg-blue-100 dark:bg-dark-border-light text-blue-900 dark:text-dark-accent-main px-3 py-1 rounded-full text-sm font-medium capitalize"
+                className="bg-gray-100 dark:bg-black text-black dark:text-white px-4 py-2 rounded-full text-sm font-bold capitalize tracking-wide border border-gray-200 dark:border-gray-700"
               >
                 {muscle}
               </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Description */}
-        <div>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-dark-text-secondary uppercase tracking-wide mb-2">
-            Instructions
-          </h3>
-          <div className="space-y-2">
-            {exercise.description.split("___").map((instruction, index) => (
-              <p key={index} className="text-gray-700 dark:text-dark-text-secondary text-sm leading-relaxed">
-                {instruction.trim()}
-              </p>
             ))}
           </div>
         </div>
@@ -204,12 +207,12 @@ export default function ExerciseCard(props) {
           {["reps", "rest", "tempo"].map((info) => (
             <div
               key={info}
-              className="bg-gray-50 dark:bg-dark-bg-primary p-4 rounded-lg border border-gray-200 dark:border-dark-border-dark"
+              className="bg-gray-50 dark:bg-black p-6 rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300"
             >
-              <h3 className="text-xs font-semibold text-gray-500 dark:text-dark-text-secondary uppercase tracking-wide mb-1">
+              <h3 className="text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">
                 {info === "reps" ? exercise.unit : info}
               </h3>
-              <p className="text-lg font-bold text-gray-900 dark:text-dark-text-primary">{exercise[info]}</p>
+              <p className="text-2xl font-black text-black dark:text-white">{exercise[info]}</p>
             </div>
           ))}
 
@@ -217,80 +220,124 @@ export default function ExerciseCard(props) {
           <button
             onClick={handleSetIncrement}
             disabled={setsCompleted === 5}
-            className="relative bg-blue-50 dark:bg-dark-border-dark hover:bg-blue-100 dark:hover:bg-dark-border-light p-4 rounded-lg border-2 border-blue-200 dark:border-dark-border-light hover:border-blue-300 dark:hover:border-dark-accent-main transition-all duration-200 group disabled:opacity-70 disabled:cursor-not-allowed"
+            className="relative bg-black dark:bg-white text-white dark:text-black p-6 rounded-2xl border-2 border-black dark:border-white hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl"
           >
-            <h3 className="text-xs font-semibold text-blue-600 dark:text-dark-accent-main uppercase tracking-wide mb-1">
-              Sets Completed
+            <h3 className="text-xs font-black uppercase tracking-widest mb-2">
+              SETS COMPLETED
             </h3>
-            <p className="text-lg font-bold text-blue-900 dark:text-dark-accent-main group-hover:scale-110 transition-transform duration-200">
+            <p className="text-2xl font-black group-hover:scale-110 transition-transform duration-300">
               {setsCompleted} / 5
             </p>
             {showSetCompletionPopup && (
-              <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs px-2 py-1 rounded-full shadow-md animate-bounce">
-                🎉 Done!
+              <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-black dark:bg-white text-white dark:text-black text-xs px-4 py-2 rounded-full shadow-2xl animate-bounce font-bold tracking-widest">
+                COMPLETE
               </div>
             )}
           </button>
         </div>
 
         {/* Rest Timer Controls */}
-        <div className="bg-gray-50 dark:bg-dark-bg-primary p-4 rounded-lg border border-gray-200 dark:border-dark-border-dark">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-gray-600 dark:text-dark-text-secondary uppercase tracking-wide">
-              Rest Timer
-            </h3>
-            <div className="flex items-center gap-2">
+        <div className="bg-gray-50 dark:bg-black p-6 rounded-2xl border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-1 h-6 bg-black dark:bg-white rounded-full"></div>
+              <h3 className="text-sm font-black text-black dark:text-white uppercase tracking-widest">
+                REST TIMER
+              </h3>
+            </div>
+            <div className="flex items-center gap-3">
               <input
                 type="number"
                 value={restDuration}
                 onChange={(e) => setRestDuration(Number.parseInt(e.target.value) || 90)}
-                className="w-16 px-2 py-1 text-sm border rounded dark:bg-dark-bg-secondary dark:border-dark-border-dark dark:text-dark-text-primary"
+                className="w-20 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-black text-black dark:text-white font-bold text-center"
                 min="30"
                 max="300"
               />
-              <span className="text-xs text-gray-500 dark:text-dark-text-secondary">sec</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase">SEC</span>
             </div>
           </div>
-          <div className="flex gap-2">
+          
+          <div className="flex gap-3">
             <button
               onClick={startRestTimer}
               disabled={isResting}
-              className="flex-1 bg-blue-900 dark:bg-dark-accent-main hover:bg-blue-800 dark:hover:bg-dark-accent-dark text-white px-3 py-2 rounded text-sm font-medium transition-colors disabled:opacity-50"
+              className="flex-1 bg-black dark:bg-white text-white dark:text-black px-4 py-3 rounded-xl text-sm font-bold tracking-widest uppercase transition-all duration-300 disabled:opacity-50 hover:shadow-lg"
             >
-              Start Rest
+              START REST
             </button>
             <button
               onClick={stopRestTimer}
               disabled={!isResting}
-              className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm font-medium transition-colors disabled:opacity-50"
+              className="flex-1 bg-gray-600 dark:bg-gray-400 text-white dark:text-black px-4 py-3 rounded-xl text-sm font-bold tracking-widest uppercase transition-all duration-300 disabled:opacity-50 hover:shadow-lg"
             >
-              Stop Rest
+              STOP REST
             </button>
           </div>
+          
           {isResting && (
-            <div className="mt-2 text-center">
-              <p className="text-2xl font-bold text-blue-900 dark:text-dark-accent-main">{formatTime(restTimer)}</p>
+            <div className="mt-6 text-center">
+              <p className="text-4xl font-black text-black dark:text-white tracking-widest">{formatTime(restTimer)}</p>
             </div>
           )}
+        </div>
+
+        {/* Expandable Instructions */}
+        <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex items-center gap-3 text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-400 font-bold transition-colors duration-300 group"
+          >
+            <div className="w-1 h-6 bg-black dark:bg-white rounded-full group-hover:bg-gray-600 dark:group-hover:bg-gray-400 transition-colors duration-300"></div>
+            <span className="text-sm uppercase tracking-widest">INSTRUCTIONS</span>
+            <svg
+              className={`w-5 h-5 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <div
+            className={`overflow-hidden transition-all duration-500 ${
+              isExpanded ? "max-h-96 opacity-100 mt-6" : "max-h-0 opacity-0"
+            }`}
+          >
+            <div className="space-y-3">
+              {exercise.description.split("___").map((instruction, index) => (
+                <div key={index} className="flex items-start gap-4">
+                  <div className="w-2 h-2 bg-black dark:bg-white rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-medium">
+                    {instruction.trim()}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Logged Sets Display */}
         {loggedSets.length > 0 && (
           <div>
-            <h3 className="text-sm font-semibold text-gray-600 dark:text-dark-text-secondary uppercase tracking-wide mb-2">
-              Logged Sets
-            </h3>
-            <div className="space-y-2">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-1 h-6 bg-black dark:bg-white rounded-full"></div>
+              <h3 className="text-sm font-black text-black dark:text-white uppercase tracking-widest">
+                LOGGED SETS
+              </h3>
+            </div>
+            <div className="space-y-3">
               {loggedSets.map((set, index) => (
                 <div
                   key={index}
-                  className="bg-gray-50 dark:bg-dark-bg-primary p-3 rounded-lg border border-gray-200 dark:border-dark-border-dark"
+                  className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300"
                 >
                   <div className="flex justify-between items-center">
-                    <span className="font-medium text-gray-900 dark:text-dark-text-primary">Set {set.set}</span>
-                    <div className="flex gap-4 text-sm text-gray-600 dark:text-dark-text-secondary">
-                      <span>{set.weight}lbs</span>
-                      <span>{set.reps} reps</span>
+                    <span className="font-black text-black dark:text-white tracking-wide">SET {set.set}</span>
+                    <div className="flex gap-6 text-sm text-gray-600 dark:text-gray-400 font-bold">
+                      <span>{set.weight}LBS</span>
+                      <span>{set.reps} REPS</span>
                       <span>RPE {set.rpe}</span>
                     </div>
                   </div>
@@ -300,29 +347,31 @@ export default function ExerciseCard(props) {
           </div>
         )}
 
-        {/* Explain This Button */}
-        <div className="border-t pt-4 border-gray-200 dark:border-dark-border-dark">
+        {/* Exercise Explanation */}
+        <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
           <button
             onClick={() => setShowExplanation(!showExplanation)}
-            className="flex items-center gap-2 text-blue-900 dark:text-dark-accent-main hover:text-blue-700 dark:hover:text-dark-accent-dark font-medium transition-colors duration-200"
+            className="flex items-center gap-3 text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-400 font-bold transition-colors duration-300 group"
           >
+            <div className="w-1 h-6 bg-black dark:bg-white rounded-full group-hover:bg-gray-600 dark:group-hover:bg-gray-400 transition-colors duration-300"></div>
+            <span className="text-sm uppercase tracking-widest">EXPLANATION</span>
             <svg
-              className={`w-4 h-4 transition-transform duration-200 ${showExplanation ? "rotate-180" : ""}`}
+              className={`w-5 h-5 transition-transform duration-300 ${showExplanation ? "rotate-180" : ""}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-            Explain This Exercise
           </button>
 
-          {/* Explanation */}
           <div
-            className={`overflow-hidden transition-all duration-300 ${showExplanation ? "max-h-40 opacity-100 mt-3" : "max-h-0 opacity-0"}`}
+            className={`overflow-hidden transition-all duration-500 ${
+              showExplanation ? "max-h-40 opacity-100 mt-6" : "max-h-0 opacity-0"
+            }`}
           >
-            <div className="bg-blue-50 dark:bg-dark-bg-primary p-4 rounded-lg border-l-4 border-blue-900 dark:border-dark-accent-main">
-              <p className="text-gray-700 dark:text-dark-text-secondary text-sm leading-relaxed">
+            <div className="bg-gray-50 dark:bg-black p-6 rounded-xl border-l-4 border-black dark:border-white">
+              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-medium">
                 {getExplanation(exercise.name)}
               </p>
             </div>
@@ -332,63 +381,50 @@ export default function ExerciseCard(props) {
 
       {/* Logging Modal */}
       {showLoggingModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white dark:bg-dark-bg-secondary rounded-xl max-w-md w-full p-6 shadow-2xl border border-gray-200 dark:border-dark-border-dark">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-dark-text-primary mb-4">
-              Log Set {loggedSets.length + 1}
-            </h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1">
-                  Weight (lbs)
-                </label>
-                <input
-                  type="number"
-                  value={currentSetData.weight}
-                  onChange={(e) => setCurrentSetData({ ...currentSetData, weight: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-dark rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-dark-accent-main dark:bg-dark-bg-primary dark:text-dark-text-primary"
-                  placeholder="135"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1">
-                  Reps
-                </label>
-                <input
-                  type="number"
-                  value={currentSetData.reps}
-                  onChange={(e) => setCurrentSetData({ ...currentSetData, reps: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-dark rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-dark-accent-main dark:bg-dark-bg-primary dark:text-dark-text-primary"
-                  placeholder="10"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-1">
-                  RPE (1-10)
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  max="10"
-                  value={currentSetData.rpe}
-                  onChange={(e) => setCurrentSetData({ ...currentSetData, rpe: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-dark rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-dark-accent-main dark:bg-dark-bg-primary dark:text-dark-text-primary"
-                  placeholder="8"
-                />
-              </div>
+        <div className="fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-white dark:bg-black rounded-2xl max-w-md w-full p-8 shadow-2xl border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-1 h-8 bg-black dark:bg-white rounded-full"></div>
+              <h3 className="text-2xl font-black text-black dark:text-white tracking-tight">
+                LOG SET {loggedSets.length + 1}
+              </h3>
             </div>
-            <div className="flex gap-3 mt-6">
+            
+            <div className="space-y-6">
+              {[
+                { key: "weight", label: "WEIGHT (LBS)", placeholder: "135" },
+                { key: "reps", label: "REPS", placeholder: "10" },
+                { key: "rpe", label: "RPE (1-10)", placeholder: "8" }
+              ].map((field) => (
+                <div key={field.key}>
+                  <label className="block text-sm font-black text-black dark:text-white uppercase tracking-widest mb-2">
+                    {field.label}
+                  </label>
+                  <input
+                    type="number"
+                    min={field.key === "rpe" ? "1" : undefined}
+                    max={field.key === "rpe" ? "10" : undefined}
+                    value={currentSetData[field.key]}
+                    onChange={(e) => setCurrentSetData({ ...currentSetData, [field.key]: e.target.value })}
+                    className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-black dark:focus:ring-white dark:bg-gray-600 dark:text-white font-bold text-center transition-all duration-300"
+                    placeholder={field.placeholder}
+                  />
+                </div>
+              ))}
+            </div>
+            
+            <div className="flex gap-4 mt-8">
               <button
                 onClick={handleLogSet}
-                className="flex-1 bg-blue-900 dark:bg-dark-accent-main hover:bg-blue-800 dark:hover:bg-dark-accent-dark text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="flex-1 bg-black dark:bg-white text-white dark:text-black px-6 py-3 rounded-xl font-bold tracking-widest uppercase transition-all duration-300 hover:shadow-lg"
               >
-                Log Set
+                LOG SET
               </button>
               <button
                 onClick={() => setShowLoggingModal(false)}
-                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="flex-1 bg-gray-600 dark:bg-gray-400 text-white dark:text-black px-6 py-3 rounded-xl font-bold tracking-widest uppercase transition-all duration-300 hover:shadow-lg"
               >
-                Cancel
+                CANCEL
               </button>
             </div>
           </div>

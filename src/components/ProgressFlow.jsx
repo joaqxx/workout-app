@@ -10,9 +10,9 @@ export default function ProgressFlow({ currentStep }) {
     <div className="w-full max-w-4xl mx-auto mb-12">
       <div className="flex items-center justify-between relative">
         {/* Progress Line */}
-        <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-200 dark:bg-dark-border-dark -translate-y-1/2 z-0">
+        <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-500 dark:bg-black -translate-y-1/2 z-0">
           <div
-            className="h-full bg-blue-900 dark:bg-dark-accent-main transition-all duration-500 ease-out"
+            className="h-full bg-black dark:bg-white transition-all duration-500 ease-out"
             style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
           />
         </div>
@@ -26,11 +26,11 @@ export default function ProgressFlow({ currentStep }) {
                             transition-all duration-300 transform
                             ${
                               currentStep >= step.id
-                                ? "bg-blue-900 dark:bg-dark-accent-main text-white scale-110 shadow-lg"
-                                : "bg-white dark:bg-dark-bg-secondary text-gray-400 dark:text-dark-text-secondary border-2 border-gray-200 dark:border-dark-border-dark"
+                                ? "bg-black dark:bg-black text-white scale-110 shadow-lg"
+                                : "bg-white dark:bg-gray-600 text-gray-400 dark:text-dark-text-secondary border-2 border-gray-200 dark:border-dark-border-dark"
                             }
                             ${currentStep === step.id
-                              ? "ring-4 ring-blue-200 dark:ring-dark-accent-main/10 animate-pulse [animation-duration:3s]"
+                              ? "ring-4 ring-black dark:ring-white/10 animate-pulse [animation-duration:3s]"
                               : ""}
 
                         `}
@@ -43,7 +43,7 @@ export default function ProgressFlow({ currentStep }) {
               <p
                 className={`
                                 text-sm font-medium transition-colors duration-300
-                                ${currentStep >= step.id ? "text-blue-900 dark:text-white" : "text-gray-400 dark:text-dark-text-secondary"}
+                                ${currentStep >= step.id ? "text-gray-600 dark:text-white" : "text-gray-400 dark:text-dark-text-secondary"}
                             `}
               >
                 {step.title}
@@ -51,7 +51,7 @@ export default function ProgressFlow({ currentStep }) {
               <div
                 className={`
                                 h-0.5 w-8 mx-auto mt-1 transition-all duration-300
-                                ${currentStep >= step.id ? "bg-blue-900 dark:bg-white" : "bg-transparent"}
+                                ${currentStep >= step.id ? "bg-gray-600 dark:bg-white" : "bg-transparent"}
                             `}
               />
             </div>

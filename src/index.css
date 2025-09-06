@@ -24,22 +24,22 @@ span {
   background: #f1f5f9; /* Light mode track */
 }
 .dark ::-webkit-scrollbar-track {
-  background: #0f172a; /* Dark mode track (dark-bg-secondary) */
+  background: #000000; /* Dark mode track (dark-bg-secondary) */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e3a8a; /* Light mode thumb (blue-900) */
+  background: #000000; /* Light mode thumb (blue-900) */
   border-radius: 4px;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #22d3ee; /* Dark mode thumb (dark-accent-main) */
+  background: #ffffff; /* Dark mode thumb (dark-accent-main) */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1e40af; /* Light mode thumb hover (blue-800) */
+  background: #000000; /* Light mode thumb hover (blue-800) */
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: #06b6d4; /* Dark mode thumb hover (dark-accent-dark) */
+  background: #000000; /* Dark mode thumb hover (dark-accent-dark) */
 }
 
 /* Smooth animations */
@@ -70,11 +70,6 @@ span {
 
 .animate-bounce {
   animation: bounce 1s infinite;
-}
-
-/* Custom gradient backgrounds */
-.gradient-blue {
-  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
 }
 
 /* Focus styles for accessibility */

@@ -42,10 +42,10 @@ export default function Workout(props) {
   }, [exerciseCompletionStatus, workout])
 
   return (
-    <SectionWrapper id={"workout"} header={"your personalized workout"} title={["The", "ELITE", "Training"]}>
+    <SectionWrapper id={"workout"} header={"your personalized workout"} title={["Your", "Workout", "Starts Now"]}>
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-dark-border-light text-blue-900 dark:text-dark-accent-main px-4 py-2 rounded-full font-semibold">
+          <div className="inline-flex items-center gap-2 bg-black dark:bg-black text-white dark:text-white px-4 py-2 rounded-full font-semibold">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -56,7 +56,7 @@ export default function Workout(props) {
             </svg>
             {workout?.length || 0} Exercises Generated
           </div>
-          <p className="text-gray-600 dark:text-dark-text-secondary mt-4 max-w-2xl mx-auto">
+          <p className="text-black dark:text-white mt-4 max-w-2xl mx-auto">
             Your personalized workout is ready! Follow the instructions carefully and track your progress.
           </p>
         </div>
@@ -68,22 +68,22 @@ export default function Workout(props) {
         </div>
 
         {/* Completion Message */}
-        <div className="mt-16 text-center bg-white dark:bg-dark-bg-secondary rounded-xl p-8 shadow-lg border border-gray-200 dark:border-dark-border-dark">
+        <div className="mt-16 text-center bg-white dark:bg-black rounded-xl p-8 shadow-lg border border-gray-200 dark:border-dark-border-dark">
           <div className="text-4xl mb-4">🏆</div>
-          <h3 className="text-2xl font-bold text-blue-900 dark:text-dark-accent-main mb-2">Ready to Dominate?</h3>
-          <p className="text-gray-600 dark:text-dark-text-secondary mb-6">
+          <h3 className="text-2xl font-bold text-black dark:text-white mb-2">Ready to Dominate?</h3>
+          <p className="text-gray-600 dark:text-white mb-6">
             Remember to warm up properly, maintain good form, and listen to your body throughout the workout.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => (window.location.href = "#generate")}
-              className="bg-blue-900 hover:bg-blue-800 dark:bg-dark-accent-main dark:hover:bg-dark-accent-dark text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+              className="bg-black text-white hover:bg-gray-500 dark:bg-white dark:text-black dark:hover:bg-gray-500 dark:hover:text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200"
             >
               Generate New Workout
             </button>
             <button
               onClick={() => (window.location.href = "#")}
-              className="bg-white hover:bg-gray-50 dark:bg-dark-bg-secondary dark:hover:bg-dark-bg-primary text-blue-900 dark:text-dark-accent-main border-2 border-blue-900 dark:border-dark-accent-main px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+              className="bg-black text-white hover:bg-gray-500 dark:bg-white dark:text-black dark:hover:bg-gray-500 dark:hover:text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200"
             >
               Back to Top
             </button>

@@ -26,6 +26,8 @@ export default function CustomWorkoutCreator({ isVisible, onClose, onSaveWorkout
   const [selectedExercises, setSelectedExercises] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [savedWorkouts, setSavedWorkouts] = useState([])
+  const [hoveredExercise, setHoveredExercise] = useState(null)
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
   useEffect(() => {
     const saved = localStorage.getItem("customWorkouts")
@@ -81,7 +83,10 @@ export default function CustomWorkoutCreator({ isVisible, onClose, onSaveWorkout
     // Reset form
     setWorkoutName("")
     setSelectedExercises([])
-    alert("Workout saved successfully!")
+    
+    // Show success message
+    setShowSuccessMessage(true)
+    setTimeout(() => setShowSuccessMessage(false), 3000)
   }
 
   const loadWorkout = (workout) => {
@@ -98,70 +103,112 @@ export default function CustomWorkoutCreator({ isVisible, onClose, onSaveWorkout
   if (!isVisible) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-      <div className="bg-white dark:bg-dark-bg-secondary rounded-xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-200 dark:border-dark-border-dark">
-        <div className="bg-blue-900 dark:bg-dark-accent-main text-white p-6 flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Custom Workout Creator</h2>
-          <button onClick={onClose} className="text-white hover:text-gray-200 text-2xl font-bold">
-            ×
-          </button>
+    <div className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+      <div className="bg-white dark:bg-black rounded-2xl max-w-6xl w-full max-h-[85vh] overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-500">
+        {/* Header */}
+        <div className="bg-black dark:bg-gray-500 text-white dark:text-black p-4 relative overflow-hidden">
+          <div className="relative z-10 flex justify-between items-center">
+            <div className="flex items-center gap-4 ml-4">
+              <div>
+                <h2 className="text-2xl font-black tracking-tight dark:text-white">CUSTOM WORKOUT CREATOR</h2>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="w-1 h-1 bg-white dark:bg-black rounded-full"></div>
+                  <p className="text-white dark:text-white text-xs font-bold tracking-widest uppercase">
+                    BUILD YOUR PERFECT ROUTINE
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <button 
+              onClick={onClose} 
+              className="w-8 h-8 bg-white dark:bg-black text-black dark:text-white rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-500 transition-all duration-300 transform hover:scale-110"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Content */}
+        <div className="p-4 overflow-y-auto max-h-[calc(85vh-120px)]">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {/* Left Column - Create Workout */}
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-dark-text-primary mb-4">Create New Workout</h3>
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-6 bg-black dark:bg-gray-500 rounded-full"></div>
+                <h3 className="text-lg font-black text-black dark:text-white tracking-tight">CREATE NEW WORKOUT</h3>
+              </div>
 
               {/* Workout Name */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-2">
-                  Workout Name
+              <div>
+                <label className="block text-xs font-black text-black dark:text-white uppercase tracking-widest mb-2">
+                  WORKOUT NAME
                 </label>
                 <input
                   type="text"
                   value={workoutName}
                   onChange={(e) => setWorkoutName(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-dark rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-dark-accent-main dark:bg-dark-bg-primary dark:text-dark-text-primary"
-                  placeholder="My Custom Workout"
+                  className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-500 rounded-xl focus:ring-2 focus:ring-black dark:focus:ring-gray-500 dark:bg-black dark:text-white font-bold text-sm transition-all duration-300"
+                  placeholder="MY CUSTOM WORKOUT"
                 />
               </div>
 
               {/* Exercise Search */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-2">
-                  Search Exercises
+              <div>
+                <label className="block text-xs font-black text-black dark:text-white uppercase tracking-widest mb-2">
+                  SEARCH EXERCISES
                 </label>
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-dark-border-dark rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-dark-accent-main dark:bg-dark-bg-primary dark:text-dark-text-primary"
-                  placeholder="Search by exercise name or muscle..."
+                  className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-500 rounded-xl focus:ring-2 focus:ring-black dark:focus:ring-gray-500 dark:bg-black dark:text-white font-bold text-sm transition-all duration-300"
+                  placeholder="SEARCH BY EXERCISE NAME OR MUSCLE..."
                 />
               </div>
 
               {/* Exercise List */}
-              <div className="mb-6">
-                <h4 className="font-medium text-gray-700 dark:text-dark-text-secondary mb-2">Available Exercises</h4>
-                <div className="max-h-60 overflow-y-auto border border-gray-200 dark:border-dark-border-dark rounded-lg">
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-1 h-4 bg-black dark:bg-gray-500 rounded-full"></div>
+                  <h4 className="text-sm font-black text-black dark:text-white uppercase tracking-widest">
+                    AVAILABLE EXERCISES ({filteredExercises.length})
+                  </h4>
+                </div>
+                <div className="max-h-48 overflow-y-auto border-2 border-gray-200 dark:border-gray-500 rounded-xl">
                   {filteredExercises.map((exercise, index) => (
                     <div
                       key={index}
-                      className="p-3 border-b border-gray-200 dark:border-dark-border-dark last:border-b-0 hover:bg-gray-50 dark:hover:bg-dark-bg-primary"
+                      onMouseEnter={() => setHoveredExercise(index)}
+                      onMouseLeave={() => setHoveredExercise(null)}
+                      className="group p-3 border-b border-gray-200 dark:border-gray-500 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-500 transition-all duration-300"
                     >
                       <div className="flex justify-between items-center">
-                        <div>
-                          <p className="font-medium text-gray-900 dark:text-dark-text-primary">{exercise.name}</p>
-                          <p className="text-sm text-gray-600 dark:text-dark-text-secondary capitalize">
-                            {exercise.muscles.join(", ")} • {exercise.type}
-                          </p>
+                        <div className="flex-1">
+                          <h5 className="font-black text-black dark:text-white text-sm capitalize tracking-wide mb-1">
+                            {exercise.name}
+                          </h5>
+                          <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-1">
+                              <div className="w-1 h-1 bg-black dark:bg-gray-500 rounded-full"></div>
+                              <p className="text-xs text-gray-600 dark:text-gray-500 capitalize font-bold tracking-wide">
+                                {exercise.muscles.join(", ")}
+                              </p>
+                            </div>
+                            <div className="w-1 h-1 bg-gray-400 dark:bg-gray-500 rounded-full"></div>
+                            <p className="text-xs text-gray-500 dark:text-gray-500 capitalize font-bold tracking-wide">
+                              {exercise.type}
+                            </p>
+                          </div>
                         </div>
                         <button
                           onClick={() => addExercise(exercise)}
-                          className="bg-blue-900 dark:bg-dark-accent-main hover:bg-blue-800 dark:hover:bg-dark-accent-dark text-white px-3 py-1 rounded text-sm font-medium transition-colors"
+                          className="group/btn bg-black dark:bg-gray-500 text-white dark:text-white px-4 py-2 rounded-xl font-bold tracking-widest uppercase text-xs transition-all duration-300 hover:shadow-lg transform hover:scale-105"
                         >
-                          Add
+                          <span className="relative z-10">ADD</span>
+                          <div className="absolute inset-0 bg-white dark:bg-black transform scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-300 origin-left rounded-xl"></div>
                         </button>
                       </div>
                     </div>
@@ -170,46 +217,58 @@ export default function CustomWorkoutCreator({ isVisible, onClose, onSaveWorkout
               </div>
 
               {/* Selected Exercises */}
-              <div className="mb-6">
-                <h4 className="font-medium text-gray-700 dark:text-dark-text-secondary mb-2">
-                  Selected Exercises ({selectedExercises.length})
-                </h4>
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-1 h-4 bg-black dark:bg-gray-500 rounded-full"></div>
+                  <h4 className="text-sm font-black text-black dark:text-white uppercase tracking-widest">
+                    SELECTED EXERCISES ({selectedExercises.length})
+                  </h4>
+                </div>
                 <div className="space-y-3">
                   {selectedExercises.map((exercise, index) => (
                     <div
                       key={index}
-                      className="bg-gray-50 dark:bg-dark-bg-primary p-4 rounded-lg border border-gray-200 dark:border-dark-border-dark"
+                      className="bg-gray-50 dark:bg-gray-500 p-4 rounded-xl border-2 border-gray-200 dark:border-gray-500 hover:shadow-lg transition-all duration-300"
                     >
                       <div className="flex justify-between items-start mb-3">
-                        <h5 className="font-medium text-gray-900 dark:text-dark-text-primary">{exercise.name}</h5>
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 bg-black dark:bg-white text-white dark:text-black rounded-full flex items-center justify-center font-black text-xs">
+                            {index + 1}
+                          </div>
+                          <h5 className="font-black text-black dark:text-white text-sm capitalize tracking-wide">
+                            {exercise.name}
+                          </h5>
+                        </div>
                         <button
                           onClick={() => removeExercise(index)}
-                          className="text-red-600 hover:text-red-800 font-bold"
+                          className="w-6 h-6 bg-gray-600 dark:bg-gray-500 text-white dark:text-black rounded-full flex items-center justify-center hover:bg-gray-700 dark:hover:bg-gray-500 transition-all duration-300 transform hover:scale-110"
                         >
-                          ×
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
                         </button>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 dark:text-dark-text-secondary mb-1">
-                            Sets
+                          <label className="block text-xs font-black text-black dark:text-white uppercase tracking-widest mb-1">
+                            SETS
                           </label>
                           <input
                             type="number"
                             value={exercise.sets}
                             onChange={(e) => updateExercise(index, "sets", Number.parseInt(e.target.value))}
-                            className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-dark-border-dark rounded dark:bg-dark-bg-secondary dark:text-dark-text-primary"
+                            className="w-full px-3 py-2 text-xs border-2 border-gray-300 dark:border-gray-500 rounded-lg dark:bg-black dark:text-white font-bold text-center transition-all duration-300"
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 dark:text-dark-text-secondary mb-1">
-                            Reps
+                          <label className="block text-xs font-black text-black dark:text-white uppercase tracking-widest mb-1">
+                            REPS
                           </label>
                           <input
                             type="text"
                             value={exercise.reps}
                             onChange={(e) => updateExercise(index, "reps", e.target.value)}
-                            className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-dark-border-dark rounded dark:bg-dark-bg-secondary dark:text-dark-text-primary"
+                            className="w-full px-3 py-2 text-xs border-2 border-gray-300 dark:border-gray-500 rounded-lg dark:bg-black dark:text-white font-bold text-center transition-all duration-300"
                           />
                         </div>
                       </div>
@@ -218,42 +277,86 @@ export default function CustomWorkoutCreator({ isVisible, onClose, onSaveWorkout
                 </div>
               </div>
 
-              <Button text="Save Workout" func={saveWorkout} />
+              {/* Save Button */}
+              <div className="pt-2">
+                <button
+                  onClick={saveWorkout}
+                  className="group w-full bg-black dark:bg-gray-500 text-white dark:text-white px-6 py-3 rounded-xl font-black tracking-widest uppercase text-sm transition-all duration-300 hover:shadow-xl transform hover:scale-105"
+                >
+                  <span className="relative z-10">SAVE WORKOUT</span>
+                  <div className="absolute inset-0 bg-white dark:bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-xl"></div>
+                </button>
+                
+                {/* Success Message */}
+                {showSuccessMessage && (
+                  <div className="mt-3 p-3 bg-gray-100 dark:bg-gray-500 border-2 border-gray-300 dark:border-gray-500 rounded-xl text-center">
+                    <p className="text-black dark:text-white font-bold tracking-widest uppercase text-xs">
+                      ✓ WORKOUT SAVED SUCCESSFULLY
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Right Column - Saved Workouts */}
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-dark-text-primary mb-4">Saved Workouts</h3>
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-6 bg-black dark:bg-gray-500 rounded-full"></div>
+                <h3 className="text-lg font-black text-black dark:text-white tracking-tight">SAVED WORKOUTS</h3>
+              </div>
+              
               <div className="space-y-4">
                 {savedWorkouts.length === 0 ? (
-                  <p className="text-gray-500 dark:text-dark-text-secondary text-center py-8">
-                    No saved workouts yet. Create your first custom workout!
-                  </p>
+                  <div className="text-center py-12">
+                    <h4 className="text-lg font-black text-black dark:text-white mb-2 tracking-tight">NO SAVED WORKOUTS</h4>
+                    <p className="text-gray-500 dark:text-gray-500 font-medium tracking-wide text-sm">
+                      Create your first custom workout to see it here
+                    </p>
+                  </div>
                 ) : (
                   savedWorkouts.map((workout) => (
                     <div
                       key={workout.id}
-                      className="bg-gray-50 dark:bg-dark-bg-primary p-4 rounded-lg border border-gray-200 dark:border-dark-border-dark"
+                      className="bg-gray-50 dark:bg-gray-500 p-4 rounded-xl border-2 border-gray-200 dark:border-gray-500 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
                     >
-                      <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-medium text-gray-900 dark:text-dark-text-primary">{workout.name}</h4>
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-black dark:bg-white text-white dark:text-black rounded-full flex items-center justify-center font-black text-sm">
+                            {savedWorkouts.indexOf(workout) + 1}
+                          </div>
+                          <div>
+                            <h4 className="font-black text-black dark:text-white text-base capitalize tracking-tight">
+                              {workout.name}
+                            </h4>
+                            <div className="flex items-center gap-2 mt-1">
+                              <div className="w-1 h-1 bg-black dark:bg-gray-500 rounded-full"></div>
+                              <p className="text-xs text-gray-600 dark:text-gray-500 font-bold tracking-wide">
+                                {workout.exercises.length} EXERCISES
+                              </p>
+                              <div className="w-1 h-1 bg-gray-400 dark:bg-gray-500 rounded-full"></div>
+                              <p className="text-xs text-gray-500 dark:text-gray-500 font-bold tracking-wide">
+                                {new Date(workout.createdAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
                         <button
                           onClick={() => deleteWorkout(workout.id)}
-                          className="text-red-600 hover:text-red-800 text-sm"
+                          className="w-6 h-6 bg-gray-600 dark:bg-gray-500 text-white dark:text-black rounded-full flex items-center justify-center hover:bg-gray-700 dark:hover:bg-gray-500 transition-all duration-300 transform hover:scale-110"
                         >
-                          Delete
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
                         </button>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-dark-text-secondary mb-3">
-                        {workout.exercises.length} exercises • Created{" "}
-                        {new Date(workout.createdAt).toLocaleDateString()}
-                      </p>
+                      
                       <div className="flex gap-2">
                         <button
                           onClick={() => loadWorkout(workout)}
-                          className="bg-blue-900 dark:bg-dark-accent-main hover:bg-blue-800 dark:hover:bg-dark-accent-dark text-white px-3 py-1 rounded text-sm font-medium transition-colors"
+                          className="group flex-1 bg-black dark:bg-gray-500 text-white dark:text-black px-4 py-2 rounded-lg font-bold tracking-widest uppercase text-xs transition-all duration-300 hover:shadow-lg transform hover:scale-105"
                         >
-                          Use This Workout
+                          <span className="relative z-10">USE THIS WORKOUT</span>
+                          <div className="absolute inset-0 bg-white dark:bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-lg"></div>
                         </button>
                       </div>
                     </div>

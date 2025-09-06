@@ -42,7 +42,6 @@ export default function WorkoutAnalytics({ isVisible, onClose }) {
     const exerciseFrequency = {}
     let totalVolume = 0
 
-    // Scan localStorage for exercise logs
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i)
       if (key && key.startsWith("exercise_")) {
@@ -112,7 +111,7 @@ export default function WorkoutAnalytics({ isVisible, onClose }) {
       {
         label: "Total Volume (lbs)",
         data: analyticsData.volumeOverTime.map((d) => d.volume),
-        borderColor: "rgb(59, 130, 246)",
+        borderColor: "rgb(221, 228, 240)",
         backgroundColor: "rgba(59, 130, 246, 0.1)",
         tension: 0.4,
       },
@@ -125,8 +124,8 @@ export default function WorkoutAnalytics({ isVisible, onClose }) {
       {
         label: "Sets Completed",
         data: Object.values(analyticsData.exerciseFrequency),
-        backgroundColor: "rgba(59, 130, 246, 0.8)",
-        borderColor: "rgb(59, 130, 246)",
+        backgroundColor: "rgba(42, 44, 46, 0.8)",
+        borderColor: "rgb(158, 160, 162)",
         borderWidth: 1,
       },
     ],
@@ -148,37 +147,37 @@ export default function WorkoutAnalytics({ isVisible, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-      <div className="bg-white dark:bg-dark-bg-secondary rounded-xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-200 dark:border-dark-border-dark">
-        <div className="bg-blue-900 dark:bg-dark-accent-main text-white p-6 flex justify-between items-center">
+      <div className="bg-white dark:bg-dark-bg-secondary rounded-xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-200 dark:border-black">
+        <div className="bg-black dark:bg-white text-white dark:text-black p-6 flex justify-between items-center">
           <h2 className="text-2xl font-bold">Workout Analytics</h2>
-          <button onClick={onClose} className="text-white hover:text-gray-200 text-2xl font-bold">
+          <button onClick={onClose} className="text-white dark:text-black hover:text-gray-200 text-2xl font-bold">
             ×
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)] bg-white dark:bg-black">
           {/* Summary Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-lg border border-gray-200 dark:border-dark-border-dark text-center">
-              <h3 className="text-2xl font-bold text-blue-900 dark:text-dark-accent-main">
+            <div className="bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-xl border border-black dark:border-white text-center shadow-sm hover:shadow-md transition-shadow duration-200">
+              <h3 className="text-2xl font-bold text-black dark:text-white">
                 {analyticsData.totalWorkouts}
               </h3>
               <p className="text-gray-600 dark:text-dark-text-secondary">Total Workouts</p>
             </div>
-            <div className="bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-lg border border-gray-200 dark:border-dark-border-dark text-center">
-              <h3 className="text-2xl font-bold text-blue-900 dark:text-dark-accent-main">
+            <div className="bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-xl border border-black dark:border-white dark:border-dark-border-dark text-center shadow-sm hover:shadow-md transition-shadow duration-200">
+              <h3 className="text-2xl font-bold text-black dark:text-white">
                 {analyticsData.totalVolume.toLocaleString()}
               </h3>
               <p className="text-gray-600 dark:text-dark-text-secondary">Total Volume (lbs)</p>
             </div>
-            <div className="bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-lg border border-gray-200 dark:border-dark-border-dark text-center">
-              <h3 className="text-2xl font-bold text-blue-900 dark:text-dark-accent-main">
+            <div className="bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-xl border  border-black dark:border-white text-center shadow-sm hover:shadow-md transition-shadow duration-200">
+              <h3 className="text-2xl font-bold text-black dark:text-white">
                 {Object.keys(analyticsData.exerciseProgress).length}
               </h3>
               <p className="text-gray-600 dark:text-dark-text-secondary">Exercises Tracked</p>
             </div>
-            <div className="bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-lg border border-gray-200 dark:border-dark-border-dark text-center">
-              <h3 className="text-2xl font-bold text-blue-900 dark:text-dark-accent-main">
+            <div className="bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-xl border border-black dark:border-white text-center shadow-sm hover:shadow-md transition-shadow duration-200">
+              <h3 className="text-2xl font-bold text-black dark:text-white">
                 {analyticsData.averageWorkoutTime}min
               </h3>
               <p className="text-gray-600 dark:text-dark-text-secondary">Avg Workout Time</p>
@@ -188,7 +187,7 @@ export default function WorkoutAnalytics({ isVisible, onClose }) {
           {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Volume Over Time */}
-            <div className="bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-lg border border-gray-200 dark:border-dark-border-dark">
+            <div className="bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-xl border border-black dark:border-white shadow-sm">
               <h3 className="text-lg font-bold text-gray-900 dark:text-dark-text-primary mb-4">Volume Over Time</h3>
               {analyticsData.volumeOverTime.length > 0 ? (
                 <Line data={volumeChartData} options={chartOptions} />
@@ -200,7 +199,7 @@ export default function WorkoutAnalytics({ isVisible, onClose }) {
             </div>
 
             {/* Exercise Frequency */}
-            <div className="bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-lg border border-gray-200 dark:border-dark-border-dark">
+            <div className="bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-xl border border-black dark:border-white shadow-sm">
               <h3 className="text-lg font-bold text-gray-900 dark:text-dark-text-primary mb-4">Exercise Frequency</h3>
               {Object.keys(analyticsData.exerciseFrequency).length > 0 ? (
                 <Bar data={frequencyChartData} options={chartOptions} />
@@ -213,31 +212,31 @@ export default function WorkoutAnalytics({ isVisible, onClose }) {
           </div>
 
           {/* Exercise Progress Table */}
-          <div className="mt-8 bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-lg border border-gray-200 dark:border-dark-border-dark">
+          <div className="mt-8 bg-gray-50 dark:bg-dark-bg-primary p-6 rounded-xl border border-gray-200 dark:border-white shadow-sm">
             <h3 className="text-lg font-bold text-gray-900 dark:text-dark-text-primary mb-4">Recent Progress</h3>
             {Object.keys(analyticsData.exerciseProgress).length > 0 ? (
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-white">
                 <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-gray-200 dark:border-dark-border-dark">
-                      <th className="text-left py-2 text-gray-700 dark:text-dark-text-secondary">Exercise</th>
-                      <th className="text-left py-2 text-gray-700 dark:text-dark-text-secondary">Max Weight</th>
-                      <th className="text-left py-2 text-gray-700 dark:text-dark-text-secondary">Total Sets</th>
-                      <th className="text-left py-2 text-gray-700 dark:text-dark-text-secondary">Last Workout</th>
+                  <thead className="bg-gray-100 dark:bg-black dark:text-white">
+                    <tr>
+                      <th className="text-left py-3 px-4 text-black dark:text-white font-semibold">Exercise</th>
+                      <th className="text-left py-3 px-4 text-black dark:text-white font-semibold">Max Weight</th>
+                      <th className="text-left py-3 px-4 text-black dark:text-white font-semibold">Total Sets</th>
+                      <th className="text-left py-3 px-4 text-black dark:text-white font-semibold">Last Workout</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {Object.entries(analyticsData.exerciseProgress).map(([exercise, data]) => {
+                  <tbody className="bg-white dark:bg-dark-bg-primary">
+                    {Object.entries(analyticsData.exerciseProgress).map(([exercise, data], index) => {
                       const maxWeight = Math.max(...data.map((d) => d.weight))
                       const lastWorkout = data[data.length - 1]?.date || "N/A"
                       return (
-                        <tr key={exercise} className="border-b border-gray-200 dark:border-dark-border-dark">
-                          <td className="py-2 text-gray-900 dark:text-dark-text-primary capitalize">
+                        <tr key={exercise} className={`${index % 2 === 0 ? 'bg-gray-50 dark:bg-dark-bg-primary' : 'bg-white dark:bg-gray-600'} hover:bg-gray-100 dark:hover:bg-black transition-colors duration-150`}>
+                          <td className="py-3 px-4 text-gray-900 dark:text-dark-text-primary capitalize font-medium">
                             {exercise.replace(/_/g, " ")}
                           </td>
-                          <td className="py-2 text-gray-900 dark:text-dark-text-primary">{maxWeight} lbs</td>
-                          <td className="py-2 text-gray-900 dark:text-dark-text-primary">{data.length}</td>
-                          <td className="py-2 text-gray-900 dark:text-dark-text-primary">{lastWorkout}</td>
+                          <td className="py-3 px-4 text-gray-900 dark:text-dark-text-primary">{maxWeight} lbs</td>
+                          <td className="py-3 px-4 text-gray-900 dark:text-dark-text-primary">{data.length}</td>
+                          <td className="py-3 px-4 text-gray-900 dark:text-dark-text-primary">{lastWorkout}</td>
                         </tr>
                       )
                     })}
